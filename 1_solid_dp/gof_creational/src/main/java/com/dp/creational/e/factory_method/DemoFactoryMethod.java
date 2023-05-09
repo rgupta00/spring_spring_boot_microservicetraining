@@ -4,8 +4,8 @@ public class DemoFactoryMethod {
 
 	public static void main(String[] args) {
 
-		BatchProcessor batchProcessor = new BatchProcessor();
-		batchProcessor.processBatch("foo");
+		BatchProcessor batchProcessor = new CsvBatchProcessor();
+		batchProcessor.processBatch("empdata");
 	}
 
 }

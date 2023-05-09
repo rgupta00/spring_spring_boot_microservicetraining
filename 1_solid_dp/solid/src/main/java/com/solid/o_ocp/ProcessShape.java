@@ -9,6 +9,8 @@ public class ProcessShape {
 			((SquareShape) shape).drawSquare();
 		}else if(shape instanceof TriangleShape) {
 			((TriangleShape) shape).drawTriangle();
+		}else if(shape instanceof RectangleShape) {
+			((RectangleShape) shape).drawRectangle();
 		}
 	}
 }
