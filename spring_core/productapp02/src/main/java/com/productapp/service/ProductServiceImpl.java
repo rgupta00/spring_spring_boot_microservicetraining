@@ -1,8 +1,8 @@
 package com.productapp.service;
 //SR+NFR
 //working + logging/cahing/tx/sec/exhannding
-import com.productapp.dao.ProductDao;
-import com.productapp.dto.Product;
+import com.productapp.entities.Product;
+import com.productapp.repo.ProductRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +12,20 @@ import java.util.List;
 @Service(value = "productservice")
 public class ProductServiceImpl implements ProductService{
 
-    private ProductDao productDao;
+    private ProductRepo productRepo;
+
     private Logger logger= LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
-    public ProductServiceImpl(ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductServiceImpl(ProductRepo productRepo) {
+        this.productRepo = productRepo;
     }
 
     @Override
     public List<Product> getAll() {
         long start=System.currentTimeMillis();
         logger.info("get all is called");
-        List<Product> products= productDao.getAll();
+        List<Product> products= productRepo.findAll();
         long end=System.currentTimeMillis();
         logger.info("method getAll() take :"+ (end-start)+" ms");
         return products;
