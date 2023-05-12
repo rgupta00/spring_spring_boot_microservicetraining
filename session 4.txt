@@ -1,0 +1,224 @@
+
+Validation:
+-----------------
+
+	@NotNull(message = "{product.name.absent}")
+	@Pattern(regexp = "[A-Za-z]+( [A-Za-z]+)*", message = "{product.name.invalid}")
+	private String name;
+
+	@NotNull(message = "{product.price.absent}")
+	@Range(min = 100, max = 100000, message = "{product.price.invalid}")
+	private BigDecimal price;
+	
+	
+	
+	
+	
+	
+ValidationMessages.properties
+-----------------------------
+
+product.name.absent=Please provide product name
+product.name.invalid=product Name should contain only alphabets and space
+
+product.price.absent=Please provide product price 
+product.price.invalid=Please provide correct price bw 100 to 100000
+
+
+
+xml support
+-------
+
+  <dependency>
+	<groupId>com.fasterxml.jackson.dataformat</groupId>
+	<artifactId>jackson-dataformat-xml</artifactId>
+  </dependency>
+
+
+spring boot pagination support
+------------------------------
+
+
+
+spring boot logging:
+-------------------
+ 	     
+Disable logging :
+---------------
+logging.level.root=OFF
+logging.level.org.springframework.boot=OFF
+spring.main.banner-mode=OFF   
+
+	     
+     
+Customizing logging :
+---------------	     
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
+
+logging.level.com.productapp=info
+
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
+
+
+# Logging pattern for the console
+logging.pattern.console= "%d{yyyy-MM-dd } [%thread] %-5level %logger{36} - %msg%n"
+#logging pattern for file
+logging.pattern.file= "%d{yyyy-MM-dd } [%thread] %-5level %logger{36} - %msg%n"
+
+logging.file.name=/home/raj/Desktop/logs/server.log
+
+
+
+
+Using OpenAPI 3.0
+_____________________
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+
+
+		<dependency>
+		    <groupId>org.springdoc</groupId>
+		    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+		    <version>2.0.0</version>
+		</dependency>
+		
+		
+	http://localhost:8090/bookapp/v3/api-docs
+	
+	http://localhost:8090/bookapp/swagger-ui/index.html
+
+	http://localhost:8090/bookapp/v3/api-docs.yaml
+
+	springdoc.swagger-ui.path=/swagger-ui-bookapp.html
+
+	
+	
+actuator:
+----------------
+management.endpoints.web.exposure.include=*
+management.endpoints.jmx.exposure.include=*
+management.endpoints.web.base-path=/productapp
+management.endpoint.shutdown.enabled=true
+management.endpoint.health.show-details= always
+
+
+
+Swagger
+---------
+
+
+		
+springdoc.swagger-ui.path=/swagger-ui-productapp.html
+
+
+
+spring boot mongodb
+-----------------
+
+use rajdb;	// create as well switch to rajdb
+
+
+db.employees.insert({empName:"ekta", age:"36", salary:"60000"})
+
+	
+db.employees.find()
+
+
+*/
+
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=mongodb
+spring.data.mongodb.repositories.enabled=true
+
+
+	
+	
+	
+Converting jar to war and deploy over tomcat
+------------------------------------------
+ 
+ 
+ 
+ 
+spring boot joins
+--------------------
+
+Entities:
+--------
+
+public class Department {
+
+	private int did;
+	
+	private String dname;
+	
+	private List<Employee>employees=new ArrayList<>();
+}
+
+
+public class Employee {
+	
+	private int eid;
+	private String name;
+
+	private double salary;
+
+	
+	private Department department;
+
+}
+
+
+Initilizing data:
+-----------------
+
+		Department d1=new Department("fin");
+		Department d2=new Department("IT");
+		Department d3=new Department("sales");
+		
+		Employee emp1=new Employee("ravi", 6000.00, d1);
+		Employee emp2=new Employee("ekta", 4000.00, d1);
+		
+		Employee emp3=new Employee("keshav", 7000.00, d2);
+		Employee emp4=new Employee("gunika", 3400.00, d2);
+		
+		Employee emp5=new Employee("raj", 7800.00, d3);
+		
+		//dept 1 have 1,2 emps
+		d1.getEmployees().add(emp1);
+		d1.getEmployees().add(emp2);
+		
+		
+		d2.getEmployees().add(emp3);
+		d2.getEmployees().add(emp4);
+		
+		d3.getEmployees().add(emp5);
+		
+		deptRepo.save(d1);
+		deptRepo.save(d2);
+		deptRepo.save(d3);
+		
+		empRepo.save(emp1);
+		empRepo.save(emp2);
+		empRepo.save(emp3);
+		empRepo.save(emp4);
+		empRepo.save(emp5);
+	
+
+
+ 
+ 
+ microserice communication
+ -------------------------
+ restTemplate
+ OpenFeign rest client
+ 
+ 

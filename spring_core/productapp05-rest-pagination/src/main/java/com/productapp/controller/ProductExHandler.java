@@ -36,6 +36,7 @@ public class ProductExHandler {
 
         //You need to extract error messsage from MethodArgumentNotValidException ex
 
+        //Java 8 -> Java 20
         String errorMessage= ex.getBindingResult()
                 .getAllErrors()
                 .stream()
