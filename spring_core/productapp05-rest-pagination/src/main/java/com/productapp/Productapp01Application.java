@@ -15,6 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class Productapp01Application implements CommandLineRunner {
@@ -28,8 +31,16 @@ public class Productapp01Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("adding 2 records");
-		productRepo.save(new Product("dell laptop X2", new BigDecimal(120000)));
-		productRepo.save(new Product("laptop cleaner", new BigDecimal(120)));
+		//adding many produts
+		List<Product> products= IntStream.
+				rangeClosed(1,2000)
+				.mapToObj(i->
+						new Product("product "+ i, new Random().nextDouble(20000)))
+				.toList();
+		productRepo.saveAll(products);
+		System.out.println("--------------------");
+
+//		productRepo.save(new Product("dell laptop X2", 120000));
+//		productRepo.save(new Product("laptop cleaner", 120));
 	}
 }

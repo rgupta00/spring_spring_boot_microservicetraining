@@ -1,5 +1,6 @@
 package com.productapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,11 +29,11 @@ public class Product {
     private String name;
 
    // @Column(nullable = false)
-   @NotNull(message = "price should not be null")
-   @Range(min = 10, max = 150000, message = "product range must be valid")
-    private BigDecimal price;
+//   @NotNull(message = "price should not be null")
+//   @Range(min = 10, max = 150000, message = "product range must be valid")
+    private double price;
 
-    public Product(String name, BigDecimal price) {
+    public Product(String name, double price) {
         this.name = name;
         this.price = price;
     }
