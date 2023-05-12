@@ -32,15 +32,16 @@ public class Productapp01Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		//adding many produts
-		List<Product> products= IntStream.
-				rangeClosed(1,2000)
-				.mapToObj(i->
-						new Product("product "+ i, new Random().nextDouble(20000)))
-				.toList();
-		productRepo.saveAll(products);
+//		List<Product> products= IntStream.
+//				rangeClosed(1,2000)
+//				.mapToObj(i->
+//						new Product("product "+ i, new Random().nextDouble(20000)))
+//				.toList();
+//		productRepo.saveAll(products);
 		System.out.println("--------------------");
 
-//		productRepo.save(new Product("dell laptop X2", 120000));
-//		productRepo.save(new Product("laptop cleaner", 120));
+		productRepo.save(new Product("dell laptop X2", 12000));
+		productRepo.save(new Product("laptop cleaner", 120));
+
 	}
 }

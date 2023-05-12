@@ -24,13 +24,12 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int id;
 
-    @NotEmpty(message = "product name must be passed")
-   // @Pattern(regexp = "[A-Za-z]+( [A-Za-z]+)*", message = "{product.name.invalid}")
+    @NotEmpty(message = "{product.name.absent}")
     private String name;
 
-   // @Column(nullable = false)
-//   @NotNull(message = "price should not be null")
-//   @Range(min = 10, max = 150000, message = "product range must be valid")
+    @Column(nullable = false)
+   @NotNull(message = "{product.price.absent}")
+   @Range(min = 10, max = 150000, message = "{product.price.invalid}")
     private double price;
 
     public Product(String name, double price) {
