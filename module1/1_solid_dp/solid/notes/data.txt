@@ -1,0 +1,8 @@
+create database dpdemo;
+mysql -u root -p
+use  dpdemo;
+create table product (id integer not null auto_increment, name varchar(255), price double precision not null, primary key (id));
+
+insert into product(name,price) values("laptop",78000);
+
+
