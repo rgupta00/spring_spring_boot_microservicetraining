@@ -21,15 +21,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component;
 
 @Component
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableMethodSecurity
 public class SecConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
     @Autowired
-    private JwtAuthFilter jwtAuthFilter;
+    private JwtAuthFilter authFilter;
 
     //auth: Who are u?      401
     @Bean
@@ -45,29 +51,19 @@ public class SecConfig {
     }
     //authorization
     //I know who are you but u dont hv acces to this resoucce 403
-
-    //4. let allow to bypass "authenticate"
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)throws  Exception{
-       return  http.csrf().disable()
-               .authorizeHttpRequests()
-               .requestMatchers("/home","/authenticate").permitAll()
-               .and()
-               .authorizeHttpRequests().requestMatchers("/**")
-               .authenticated()
-               .and()
-               .httpBasic()
-               .and()
-               .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               .and()
-               .authenticationProvider(getAuthentication())
-               .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-               .build();
-    }
-
-    //5. get the AM
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)throws Exception {
-        return config.getAuthenticationManager();
+        return http.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/home","/authenticate").permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/**")
+                .authenticated().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(getAuthentication())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }

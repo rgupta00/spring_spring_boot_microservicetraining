@@ -15,46 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
+    @GetMapping(path = "home")
+    public String home(){
+        return "home ";
+    }
+
+    @GetMapping(path = "mgr")
+    public String mgr(){
+        return "mgr ";
+    }
+
+    @GetMapping(path = "clerk")
+    public String clerk(){
+        return "clerk ";
+    }
+
     @Autowired
     private JwtService jwtService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping(path = "home")
-    public String home() {
-        return "home ";
-    }
-
-    //3. craete a endpoint so that user can send his u/p and get token
-    @PostMapping(path = "authenticate")
+    @PostMapping("/authenticate")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-
-        Authentication authentication
-                =authenticationManager.
-                authenticate(new UsernamePasswordAuthenticationToken(
-                        authRequest.getUsername(),
-                        authRequest.getPassword()
-                ));
-
-        if(authentication.isAuthenticated()){
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(),
+                        authRequest.getPassword()));
+        if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getUsername());
-        }else {
-            throw  new UsernameNotFoundException("user is invalid");
+        } else {
+            throw new UsernameNotFoundException("invalid user request !");
         }
-
-
     }
-
-//    @GetMapping(path = "mgr")
-//    public String mgr(){
-//        return "mgr ";
-//    }
-//
-//    @GetMapping(path = "clerk")
-//    public String clerk(){
-//        return "clerk ";
-//    }
-
-
 }
