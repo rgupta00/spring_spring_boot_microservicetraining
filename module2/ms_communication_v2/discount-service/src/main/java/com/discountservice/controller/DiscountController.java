@@ -1,6 +1,7 @@
 package com.discountservice.controller;
 
 import com.discountservice.dto.DiscountInfo;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
