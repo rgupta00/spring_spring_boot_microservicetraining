@@ -15,6 +15,6 @@ public class WeatherControllerClient {
 
     @GetMapping("weatherclient/{temp}")
     public String wetherInfo(@PathVariable int temp){
-        return client.callWeatherService(temp);
+        return "CLIENT"+ client.callWeatherService(temp);
     }
 }
