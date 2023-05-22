@@ -1,0 +1,226 @@
+consul tutorial:
+________________
+	=> Consul is a free and open-source service networking platform developed by HashiCorp
+
+	=> Consul was initially released in 2014 as a service discovery platform. 
+	In addition to service discovery, it now provides a full-featured service mesh for secure service 
+	segmentation across any cloud or runtime environment, and distributed key-value storage for application configuration.
+
+	=> Consul is a distributed, highly available, datacenter-aware, service discovery and configuration system. 
+	It can be used to present services and nodes in a flexible and powerful interface that allows clients 
+	to always have an up-to-date view of the infrastructure they are a part of.
+
+	=> Consul provides many different features that are used to provide consistent and available information about your     	infrastructure. 
+
+	This includes service and node discovery mechanisms, a tagging system, health checks, consensus-based election routines, 	system-wide key/value storage, and more. 
+
+
+Why it is used in microservice :
+________________________________
+	1. for service discovery ( will replace eureka server)
+	2. used for centerilized configuration ( will replae spring config server)
+
+
+
+
+
+
+1. for service discovery ( will replace eureka server)
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Creating greeting service:
+_________________________
+Apply @EnableDiscoveryClient on main class
+
+
+              <dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+		</dependency>
+
+
+give hello world controller
+
+
+@RestController
+public class GreetingController {
+	@GetMapping("/greeting")
+	public String getMessage() {
+		return "Welcome to greeting service";
+	}
+}
+
+
+spring.application.name=greeting-service
+server.port=8181
+management.endpoints.web.exposure.include=*
+
+check it working
+
+
+Creating UserController service:
+_________________________
+
+
+@RestController
+public class UserController {
+	@Autowired
+	private RestTemplate template;
+
+	@Autowired
+	private DiscoveryClient client;
+
+	@GetMapping("/accessAPI")
+	public String invokeGreetingService() {
+		/*
+		 * URI uri = client.getInstances("Greeting-service").stream().map(si ->
+		 * si.getUri()).findFirst() .map(s -> s.resolve("/greeting")).get();
+		 */
+		return template.getForObject("http://Greeting-service/greeting", String.class);
+	}
+
+
+}
+
+
+
+@SpringBootApplication
+@EnableDiscoveryClient
+public class UserServiceApplication {
+
+	@LoadBalanced
+	@Bean
+	public RestTemplate template() {
+		return new RestTemplate();
+	}
+	
+
+	public static void main(String[] args) {
+		SpringApplication.run(UserServiceApplication.class, args);
+	}
+}
+
+
+spring.application.name=user-service
+server.port=8282
+spring.main.allow-circular-references=true
+management.endpoints.web.exposure.include=*
+
+
+check it is working
+
+                 <dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+		</dependency>
+
+
+
+
+
+
+
+2. used for centerilized configuration ( will replae spring config server)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+How to get started ?
+______________________
+
+step 1: how to download and configure
+______________________________
+
+*  downlaod it from the site:
+
+https://www.consul.io/downloads
+
+* run ipcoinfig to check ur ip address and run time command
+
+Check IP : ipconfig / ifconfig
+bootstrap consul : consul agent -server -bootstrap-expect=1 -data-dir=consul-data -ui -bind=192.168.49.1
+
+
+check console : http://localhost:8500/ui/dc1/services 
+
+
+
+
+step 2: create spring boot application and that application take confgure from consule
+______________________________
+	create spring boot project : web, devtools , consul-config
+	change the version as mentioned:
+
+	choose dependency : 2.3.10.RELEASE
+	spring cloud : Hoxton.SR11
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-config</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+Step 3: configure consul for application
+______________________________
+
+spring:
+  cloud:
+    consul:
+      config:
+        fail-fast: true
+      host: localhost
+      port: 8500
+  application:
+    name: rajdemo
+
+
+
+Step 4: create a class to load the configure information from consul
+______________________________
+
+@ConfigurationProperties(prefix="my")
+public class MyConfig {
+	private String username;
+	private String password;
+}
+
+
+@RestController
+@EnableConfigurationProperties(value = MyConfig.class)
+public class HelloController{
+
+	@Autowired
+	private MyConfig config;
+
+	@GetMapping("/getConfigData")
+	public MyConfig getConfiguration() {
+		return config;
+	}
+}
+
+
+
+Step 5: configure key/value in consul
+______________________________
+config/rajdemo/my.username
+	rgupta.mtech@gmail.com
+
+config/rajdemo/my.password
+	raj1111
+
+
+
+Ref: how to install it on ubuntu
+_______________________________
+https://www.consul.io/downloads
+
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt-get install consul
+
+just follow these step simple....
+
