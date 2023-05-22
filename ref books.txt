@@ -1,0 +1,23 @@
+
+Core java books:
+----------------
+head first core java book
+thinking in java
+effective java
+
+
+web servlet and jsp
+---------------------
+jsp servlet head first
+
+
+spring boot:
+------------
+Beginning Spring Boot 3
+by K. Siva Prasad Reddy 
+
+spring boot microservice
+-------------------------
+spring boot microservices rv rajesh
+
+
