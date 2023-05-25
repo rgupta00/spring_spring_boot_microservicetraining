@@ -3,6 +3,7 @@ package com.bankapp.api;
 import com.bankapp.config.JwtService;
 import com.bankapp.dto.AuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,15 +47,17 @@ public class HelloController {
 
     }
 
-//    @GetMapping(path = "mgr")
-//    public String mgr(){
-//        return "mgr ";
-//    }
-//
-//    @GetMapping(path = "clerk")
-//    public String clerk(){
-//        return "clerk ";
-//    }
+    @PreAuthorize("hasAuthority('ROLE_MGR')")
+    @GetMapping(path = "mgr")
+    public String mgr(){
+        return "mgr ";
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_MGR') or hasAuthority('ROLE_CLERK')")
+    @GetMapping(path = "clerk")
+    public String clerk(){
+        return "clerk ";
+    }
 
 
 }
